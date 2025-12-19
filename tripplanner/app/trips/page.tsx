@@ -1,0 +1,100 @@
+"use client";
+
+import axios from "axios";
+import PageTransition from "@/components/PageTransition";
+import Link from "next/link";
+import { useEffect, useState } from "react";
+import api from "@/lib/api";
+
+export default function TripsPage() {
+  const [trips, setTrips] = useState<any[]>([]);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    const fetchTrips = async () => {
+      try {
+        const response = await api.get("/itineraries");
+        setTrips(response.data);
+
+        // Normalize data (important)
+        const normalized = response.data.map((trip: any) => ({
+          ...trip,
+          days: Array.isArray(trip.days) ? trip.days : [],
+        }));
+
+        setTrips(normalized);
+      } catch (error) {
+        console.error("Failed to fetch trips", error);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchTrips();
+  }, []);
+
+  const handleDelete = async (id: string, destination: string) => {
+    const confirmed = confirm(`Delete trip to ${destination}?`);
+    if (!confirmed) return;
+
+    try {
+      await api.delete(`/itineraries/${id}`);
+
+      // Remove from UI instantly
+      setTrips((prev) => prev.filter((trip) => trip._id !== id));
+    } catch (error) {
+      console.error("Failed to delete trip", error);
+      alert("Failed to delete itinerary");
+    }
+  };
+
+  if (loading) {
+    return <p className="text-center mt-10">Loading trips...</p>;
+  }
+
+  return (
+    <PageTransition>
+      <div className="max-w-4xl mx-auto p-6">
+        <h1 className="text-4xl font-bold mb-6">Your Saved Trips</h1>
+
+        {trips.length === 0 ? (
+          <p className="text-gray-500 text-lg">No saved trips yet.</p>
+        ) : (
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
+            {trips.map((trip) => (
+              <div
+                key={trip._id}
+                className="relative bg-white shadow rounded-2xl p-5 hover:shadow-lg transition"
+              >
+                {/* Delete Button */}
+                <button
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    handleDelete(trip._id, trip.destination);
+                  }}
+                  className="absolute top-3 right-3 text-red-500 hover:text-red-700"
+                  title="Delete trip"
+                >
+                  🗑️
+                </button>
+
+                {/* Trip Card */}
+                <Link href={`/trips/${trip._id}`} className="block">
+                  <h2 className="text-xl font-semibold">{trip.destination}</h2>
+
+                  <p className="text-gray-600">
+                    {trip.start_date} → {trip.end_date}
+                  </p>
+
+                  <p className="text-gray-800 mt-2 font-medium">
+                    {trip.days.length} Days
+                  </p>
+                </Link>
+              </div>
+            ))}
+          </div>
+        )}
+      </div>
+    </PageTransition>
+  );
+}
