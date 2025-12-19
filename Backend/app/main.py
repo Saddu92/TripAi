@@ -3,6 +3,7 @@ from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from app.routers import itineraries, ai
 from app.routers import itineraries, ai, auth
+from app.routers import admin
 
 app = FastAPI()
 
@@ -19,6 +20,8 @@ app.add_middleware(
 app.include_router(itineraries.router, prefix="/itineraries", tags=["Itineraries"])
 app.include_router(ai.router, prefix="/ai", tags=["AI"])
 app.include_router(auth.router, prefix="/auth", tags=["Auth"])
+app.include_router(admin.router)
+
 
 
 @app.get("/")

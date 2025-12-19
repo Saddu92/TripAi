@@ -10,18 +10,20 @@ import {
   CartesianGrid,
 } from "recharts";
 
-const data = [
-  { name: "Paris", value: 120 },
-  { name: "Tokyo", value: 90 },
-  { name: "Bali", value: 75 },
-  { name: "Dubai", value: 50 },
-  { name: "London", value: 45 },
-];
+export default function ChartsPlaceholder({ data }: { data: any[] }) {
+  if (!data.length) {
+    return (
+      <div className="w-full h-80 bg-gray-900 rounded-xl p-6 flex items-center justify-center text-gray-400">
+        No data available
+      </div>
+    );
+  }
 
-export default function ChartsPlaceholder() {
   return (
     <div className="w-full h-80 bg-gray-900 rounded-xl p-6">
-      <h2 className="text-xl font-semibold mb-4 text-white">Top Destinations</h2>
+      <h2 className="text-xl font-semibold mb-4 text-white">
+        Top Destinations
+      </h2>
 
       <ResponsiveContainer width="100%" height="100%">
         <BarChart data={data}>

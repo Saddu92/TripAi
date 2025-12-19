@@ -3,6 +3,7 @@ from datetime import datetime
 from app.schemas.itinerary_schema import CreateItineraryRequest
 from app.services.ai_planner import generate_places
 from app.services.geocoding import geocode_place  # ✅ only import
+from app.services.cost_estimator import allocate_budget
 
 router = APIRouter()
 
@@ -38,9 +39,14 @@ def generate_itinerary(req: CreateItineraryRequest):
             place["location"] = coords
             count += 1
 
+    # enrich with budget allocations
+    allocation = allocate_budget(days, user_budget=getattr(req, "budget", None))
+
     return {
         "destination": req.destination,
         "start_date": req.start_date,
         "end_date": req.end_date,
-        "days": days
+        "budget": getattr(req, "budget", None),
+        "days": allocation.get("days", days),
+        "budget_summary": allocation.get("budget_summary"),
     }

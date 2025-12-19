@@ -7,6 +7,7 @@ class CreateItineraryRequest(BaseModel):
     start_date: str
     end_date: str
     preferences: List[str]
+    budget: Optional[float] = None
 
 
 class Place(BaseModel):
@@ -17,6 +18,8 @@ class Place(BaseModel):
     best_time: str
     activities: List[str]
     location: Optional[Dict[str, float]] = None
+    estimated_cost: Optional[float] = None
+    allocated_cost: Optional[float] = None
 
 
 class DayPlan(BaseModel):

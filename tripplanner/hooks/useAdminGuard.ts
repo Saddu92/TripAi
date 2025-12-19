@@ -10,9 +10,13 @@ export function useAdminGuard() {
 
   useEffect(() => {
     if (!user) {
-      router.replace("/login");      // not logged in
-    } else if (user.role !== "admin") {
-      router.replace("/planner");    // logged in but not admin
+      router.replace("/login");
+      return;
+    }
+
+    // ✅ Allow BOTH admin & super_admin
+    if (!user.role || !["admin", "super_admin"].includes(user.role)) {
+      router.replace("/planner");
     }
   }, [user, router]);
 }
