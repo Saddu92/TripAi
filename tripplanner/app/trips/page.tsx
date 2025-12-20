@@ -56,17 +56,20 @@ export default function TripsPage() {
 
   return (
     <PageTransition>
-      <div className="max-w-4xl mx-auto p-6">
-        <h1 className="text-4xl font-bold mb-6">Your Saved Trips</h1>
+      <div className="w-full mx-auto p-6">
+        <div className="flex items-center justify-between mb-6">
+          <h1 className="text-4xl font-bold">Your Saved Trips</h1>
+          <p className="text-sm text-gray-500">Manage and export your saved itineraries</p>
+        </div>
 
         {trips.length === 0 ? (
           <p className="text-gray-500 text-lg">No saved trips yet.</p>
         ) : (
-          <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
             {trips.map((trip) => (
               <div
                 key={trip._id}
-                className="relative bg-white shadow rounded-2xl p-5 hover:shadow-lg transition"
+                className="relative bg-white shadow rounded-2xl p-6 hover:shadow-lg transition flex flex-col justify-between"
               >
                 {/* Delete Button */}
                 <button
@@ -74,7 +77,7 @@ export default function TripsPage() {
                     e.stopPropagation();
                     handleDelete(trip._id, trip.destination);
                   }}
-                  className="absolute top-3 right-3 text-red-500 hover:text-red-700"
+                  className="absolute top-4 right-4 text-red-500 hover:text-red-700"
                   title="Delete trip"
                 >
                   🗑️
@@ -82,15 +85,13 @@ export default function TripsPage() {
 
                 {/* Trip Card */}
                 <Link href={`/trips/${trip._id}`} className="block">
-                  <h2 className="text-xl font-semibold">{trip.destination}</h2>
+                  <h2 className="text-2xl font-semibold">{trip.destination}</h2>
 
-                  <p className="text-gray-600">
+                  <p className="text-gray-600 mt-2">
                     {trip.start_date} → {trip.end_date}
                   </p>
 
-                  <p className="text-gray-800 mt-2 font-medium">
-                    {trip.days.length} Days
-                  </p>
+                  <p className="text-gray-800 mt-4 font-medium">{trip.days.length} Days</p>
                 </Link>
               </div>
             ))}

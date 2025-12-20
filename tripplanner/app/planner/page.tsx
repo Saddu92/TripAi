@@ -54,12 +54,11 @@ export default function PlannerPage() {
 
   return (
     <PageTransition>
-      <div className="max-w-3xl mx-auto py-10">
+      <div className="w-full mx-auto py-10">
         <h1 className="text-4xl font-bold mb-6 text-center flex items-center justify-center gap-3">
           <MapPin className="text-indigo-600" /> Plan Your Trip ✈️
         </h1>
-
-        <div className="bg-white p-8 rounded-2xl shadow-lg space-y-6">
+        <div className="bg-white p-8 rounded-2xl shadow-lg space-y-6 max-w-4xl mx-auto">
           <div>
             <label className="font-semibold">Destination</label>
             <Input

@@ -31,7 +31,7 @@ export default function RootLayout({
       >
         <Header />
         <div className="page-wrap bg-gradient-to-b from-gray-50 to-white min-h-screen pb-16">
-          <main className="max-w-7xl mx-auto px-4 md:px-6">
+          <main className="w-full px-4 md:px-6">
             {children}
           </main>
         </div>

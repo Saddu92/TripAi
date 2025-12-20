@@ -14,33 +14,26 @@ export default function Header() {
     setIsLoggedIn(!!localStorage.getItem("token"));
   }, []);
 
-  if (!mounted) return null; // prevent hydration mismatch
+  if (!mounted) return null;
 
   return (
-    <header className="bg-white/80 backdrop-blur-sm sticky top-0 z-40 border-b">
-      <div className="max-w-7xl mx-auto px-4 md:px-6 py-3 flex items-center justify-between">
-        <div className="flex items-center gap-4">
-          <Link href="/" className="text-2xl font-extrabold text-indigo-600">
-            AI Travel Buddy
+    <header className="card-style flex justify-between items-center px-6 py-4 mb-8">
+      <div className="flex items-center gap-3">
+        <Link href="/" className="text-xl font-semibold text-gray-900">
+          AI Travel Buddy
+        </Link>
+        <span className="hidden md:block text-sm text-gray-400">
+          Smart itinerary planner
+        </span>
+      </div>
+
+      <div className="flex items-center gap-4">
+        {!isLoggedIn && (
+          <Link href="/login">
+            <Button className="btn-outline">Login</Button>
           </Link>
-          <div className="hidden md:block text-sm text-gray-600">Plan smarter trips with AI</div>
-        </div>
-
-        <div className="flex items-center gap-4">
-          <nav className="hidden md:flex gap-4">
-            <Link href="/planner" className="text-sm text-gray-700 hover:text-indigo-600">Planner</Link>
-            <Link href="/trips" className="text-sm text-gray-700 hover:text-indigo-600">Trips</Link>
-            <Link href="/admin/analytics" className="text-sm text-gray-700 hover:text-indigo-600">Analytics</Link>
-          </nav>
-
-          {!isLoggedIn && (
-            <Link href="/login">
-              <Button variant="ghost">Log in</Button>
-            </Link>
-          )}
-
-          <UserProfileMenu />
-        </div>
+        )}
+        <UserProfileMenu />
       </div>
     </header>
   );
