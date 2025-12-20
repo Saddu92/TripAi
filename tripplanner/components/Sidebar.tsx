@@ -5,28 +5,35 @@ import Link from "next/link";
 
 export default function Sidebar() {
   const menu = [
-    { label: "Dashboard", icon: <Home size={20} />, path: "/admin/analytics" },
-    { label: "Users", icon: <Map size={20} />, path: "/admin/users" },
-    { label: "Reports", icon: <BarChart2 size={20} />, path: "/admin/reports" },
-    { label: "Settings", icon: <Settings size={20} />, path: "/admin/settings" },
+    { label: "Dashboard", icon: <Home size={18} />, path: "/admin/analytics" },
+    { label: "Users", icon: <Map size={18} />, path: "/admin/users" },
+    { label: "Reports", icon: <BarChart2 size={18} />, path: "/admin/reports" },
+    { label: "Settings", icon: <Settings size={18} />, path: "/admin/settings" },
   ];
 
   return (
-    <aside className="h-screen w-64 bg-gray-900 text-gray-100 fixed left-0 top-0 p-6 flex flex-col">
-      <h1 className="text-2xl font-bold mb-10">Admin Panel</h1>
+    <aside className="card-style h-[calc(100vh-2rem)] w-64 fixed left-6 top-6 p-4 flex flex-col">
+      <div className="px-3 py-2">
+        <h1 className="text-lg font-semibold">AI Travel Buddy</h1>
+        <div className="text-xs text-muted-foreground mt-1">Your smart itinerary planner</div>
+      </div>
 
-      <nav className="flex flex-col gap-4">
+      <nav className="flex flex-col gap-2 mt-6 px-2">
         {menu.map((item) => (
           <Link
             key={item.label}
             href={item.path}
-            className="flex items-center gap-3 text-lg hover:text-blue-400 transition"
+            className="flex items-center gap-3 text-sm px-3 py-2 rounded-md hover:bg-gray-100 transition"
           >
-            {item.icon}
-            {item.label}
+            <span className="text-gray-600">{item.icon}</span>
+            <span className="text-gray-800">{item.label}</span>
           </Link>
         ))}
       </nav>
+
+      <div className="mt-auto px-3 py-4 text-sm text-muted-foreground">
+        © {new Date().getFullYear()} AI Travel
+      </div>
     </aside>
   );
 }

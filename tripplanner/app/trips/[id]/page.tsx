@@ -6,6 +6,8 @@ import axios from "axios";
 import PageTransition from "@/components/PageTransition";
 import DayAccordion from "@/components/DayAccordion";
 import api from "@/lib/api";
+import ItineraryActions from "@/components/ItineraryActions";
+import Link from "next/link";
 
 
 function TripDetailPage() {
@@ -27,18 +29,27 @@ function TripDetailPage() {
     if(!trip) return <p className="text-center mt-10">Loading...</p>;
   return (
     <PageTransition>
-      <div className="max-w-3xl mx-auto py-6">
-        <h1 className="text-4xl font-bold">{trip.destination}</h1>
-        <p className="text-gray-600 text-lg">
-          {trip.start_date} → {trip.end_date}
-        </p>
+        <div className="max-w-3xl mx-auto py-6">
+          <div className="flex items-start justify-between gap-4">
+            <div>
+              <Link href="/trips" className="text-sm text-blue-600">← Back to trips</Link>
+              <h1 className="text-4xl font-bold mt-2">{trip.destination}</h1>
+              <p className="text-gray-600 text-lg">
+                {trip.start_date} → {trip.end_date}
+              </p>
+            </div>
 
-        <div className="mt-6 space-y-4">
-          {trip.days?.map((day: any) => (
-            <DayAccordion key={day.day} day={day} />
-          ))}
+            <div className="shrink-0">
+              <ItineraryActions />
+            </div>
+          </div>
+
+          <div className="mt-6 space-y-4">
+            {trip.days?.map((day: any) => (
+              <DayAccordion key={day.day} day={day} />
+            ))}
+          </div>
         </div>
-      </div>
     </PageTransition>
   )
 }

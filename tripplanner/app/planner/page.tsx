@@ -4,9 +4,11 @@ import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import PageTransition from "@/components/PageTransition";
+import { MapPin } from "lucide-react";
 import axios from "axios";
 import { useRouter } from "next/navigation";
 import api from "@/lib/api";
+import toast from "react-hot-toast";
 import { useAuthGuard } from "@/hooks/useAuthGuard";
 
 
@@ -18,6 +20,7 @@ export default function PlannerPage() {
   const [endDate, setEndDate] = useState("");
   const [tripType, setTripType] = useState("");
   const [preferences, setPreferences] = useState<string[]>([]);
+  const [loading, setLoading] = useState(false);
 
   const router = useRouter();   // ✅ Correct place
 
@@ -30,31 +33,31 @@ export default function PlannerPage() {
   const handleGenerate = async () => {   // ✅ Inside component
     const payload = {
       destination,
-      budget: Number(budget),
+      budget: Number(budget) || undefined,
       start_date: startDate,
       end_date: endDate,
       preferences,
     };
 
-    console.log(payload);
-
-    // Redirect to loading screen
-    router.push("/loading");
-
-    const response = await api.post("/ai/generate", payload);
-
-
-    // Save itinerary result locally
-    localStorage.setItem("itinerary", JSON.stringify(response.data));
-
-    // Go to results page
-    router.push("/itinerary");
+    setLoading(true);
+    try {
+      const response = await api.post("/ai/generate", payload);
+      localStorage.setItem("itinerary", JSON.stringify(response.data));
+      router.push("/itinerary");
+    } catch (e) {
+      console.error(e);
+      toast.error("Failed to generate itinerary. Try again.");
+    } finally {
+      setLoading(false);
+    }
   };
 
   return (
     <PageTransition>
       <div className="max-w-3xl mx-auto py-10">
-        <h1 className="text-4xl font-bold mb-6 text-center">Plan Your Trip ✈️</h1>
+        <h1 className="text-4xl font-bold mb-6 text-center flex items-center justify-center gap-3">
+          <MapPin className="text-indigo-600" /> Plan Your Trip ✈️
+        </h1>
 
         <div className="bg-white p-8 rounded-2xl shadow-lg space-y-6">
           <div>
@@ -135,10 +138,18 @@ export default function PlannerPage() {
           </div>
 
           <Button
-            className="w-full text-lg py-6 mt-4 bg-blue-600 hover:bg-blue-700"
+            className="w-full text-lg py-4 mt-4 bg-gradient-to-r from-indigo-600 to-blue-600 hover:from-indigo-700 hover:to-blue-700"
             onClick={handleGenerate}
+            disabled={loading}
           >
-            Generate Itinerary 🚀
+            {loading ? (
+              <div className="flex items-center gap-2">
+                <span className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin" />
+                Generating...
+              </div>
+            ) : (
+              "Generate Itinerary 🚀"
+            )}
           </Button>
         </div>
       </div>

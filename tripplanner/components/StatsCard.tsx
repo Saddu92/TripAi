@@ -1,14 +1,16 @@
 type Props = {
-    title: string;
-    value: string;
-  };
-  
-  export default function StatsCard({ title, value }: Props) {
-    return (
-      <div className="bg-gray-900 rounded-xl p-6 text-center shadow-lg">
-        <h3 className="text-gray-400 mb-2">{title}</h3>
-        <p className="text-4xl font-bold">{value}</p>
-      </div>
-    );
-  }
+  title: string;
+  value: string | number;
+  subtitle?: string;
+};
+
+export default function StatsCard({ title, value, subtitle }: Props) {
+  return (
+    <div className="card-style p-4 text-center">
+      <div className="text-sm text-muted-foreground mb-2">{title}</div>
+      <div className="text-3xl font-semibold">{value}</div>
+      {subtitle && <div className="text-xs text-muted-foreground mt-1">{subtitle}</div>}
+    </div>
+  );
+}
   

@@ -9,26 +9,27 @@ export default function PlannerWidget() {
   const [budget, setBudget] = useState("");
 
   return (
-    <div className="bg-white p-6 rounded-xl shadow-md space-y-4 border">
-      <h2 className="text-2xl font-semibold text-center">
-        AI Trip Planner ✈️
-      </h2>
+    <aside className="card-style p-6 space-y-4">
+      <h2 className="text-2xl font-semibold">AI Trip Planner ✈️</h2>
 
-      <Input
-        placeholder="Destination"
-        value={destination}
-        onChange={(e) => setDestination(e.target.value)}
-      />
+      <div className="space-y-3">
+        <Input
+          placeholder="Where to?"
+          value={destination}
+          onChange={(e) => setDestination(e.target.value)}
+        />
 
-      <Input
-        placeholder="Budget"
-        value={budget}
-        onChange={(e) => setBudget(e.target.value)}
-      />
+        <Input
+          placeholder="Budget (USD)"
+          value={budget}
+          onChange={(e) => setBudget(e.target.value)}
+        />
+      </div>
 
-      <Button className="w-full bg-blue-600 hover:bg-blue-700">
-        Generate Itinerary
-      </Button>
-    </div>
+      <div className="flex gap-2">
+        <button className="btn-primary-soft flex-1">Generate Itinerary</button>
+        <button className="px-4 py-2 rounded-md border">Advanced</button>
+      </div>
+    </aside>
   );
 }

@@ -20,11 +20,11 @@ export default function MapModal({
   const center =
     places.length > 0
       ? { lat: places[0].lat, lng: places[0].lng }
-      : { lat: 20.5937, lng: 78.9629 }; // India fallback
+      : { lat: 20.5937, lng: 78.9629 };
 
   return (
     <div className="fixed inset-0 bg-black/40 flex items-center justify-center z-50">
-      <div className="bg-white w-full max-w-4xl h-[80vh] rounded-xl p-4 relative">
+      <div className="card-style w-full max-w-4xl h-[80vh] rounded-xl p-4 relative">
         <button
           onClick={onClose}
           className="absolute top-3 right-3 text-gray-600"

@@ -8,6 +8,7 @@ import { useAdminGuard } from "@/hooks/useAdminGuard";
 import api from "@/lib/api";
 import { useEffect, useState } from "react";
 import WorldHeatmap from "@/components/WorldHeatMap";
+import toast from "react-hot-toast";
 
 
 
@@ -31,7 +32,7 @@ useEffect(() => {
   const downloadCSV = async () => {
     const token = localStorage.getItem("token");
     if (!token) {
-      alert("Please login again");
+      toast.error("Please login to download reports");
       return;
     }
 
@@ -42,7 +43,7 @@ useEffect(() => {
     });
 
     if (!res.ok) {
-      alert("Failed to download report");
+      toast.error("Failed to download report");
       return;
     }
 
@@ -66,16 +67,23 @@ useEffect(() => {
 
   return (
     <PageTransition>
-      <div className="flex bg-gray-950 text-white min-h-screen">
+      <div className="flex bg-gradient-to-b from-slate-900 to-gray-900 text-white min-h-screen">
         <Sidebar />
 
         {/* Main Content */}
-        <div className="ml-64 w-full p-10 space-y-10">
+        <div className="ml-64 w-full p-8 md:p-10 space-y-8">
           {/* Header */}
-          <h1 className="text-4xl font-semibold">Analytics Dashboard</h1>
-          <p className="text-gray-400">
-            Monitor user growth, top travel destinations & trends.
-          </p>
+          <div className="flex items-center justify-between">
+            <div>
+              <h1 className="text-4xl font-semibold">Analytics Dashboard</h1>
+              <p className="text-gray-400">Monitor user growth, top travel destinations & trends.</p>
+            </div>
+            <div>
+              <button onClick={downloadCSV} className="bg-indigo-600 hover:bg-indigo-700 px-4 py-2 rounded-md">
+                Export CSV
+              </button>
+            </div>
+          </div>
 
           {/* Stats Cards */}
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
@@ -85,18 +93,11 @@ useEffect(() => {
               value={stats?.total_trips ?? "—"}
             />
             <StatsCard title="Avg Budget" value={stats?.avg_budget ?? "—"} />
-            <div className="flex gap-4">
-              <button
-                onClick={downloadCSV}
-                className="bg-blue-600 hover:bg-blue-700 px-6 py-3 rounded-lg text-white"
-              >
-                Download Itineraries Report (CSV)
-              </button>
-            </div>
+            
           </div>
 
           {/* Heatmap Section */}
-         <section className="bg-gray-900 rounded-xl p-6">
+         <section className="bg-gray-800/60 border border-gray-700 rounded-xl p-6">
   <WorldHeatmap points={heatmap} />
 </section>
 

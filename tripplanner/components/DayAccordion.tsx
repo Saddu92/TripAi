@@ -19,7 +19,7 @@ export default function DayAccordion({ day }: { day: Day }) {
   const [open, setOpen] = useState(false);
 
   return (
-    <div className="border rounded-xl overflow-hidden bg-white shadow-sm">
+    <div className="border rounded-xl overflow-hidden bg-white shadow-sm hover:shadow-md transition-shadow duration-200">
       {/* Header */}
       <button
         onClick={() => setOpen(!open)}
@@ -35,11 +35,11 @@ export default function DayAccordion({ day }: { day: Day }) {
 
       {/* Content */}
       {open && (
-        <div className="p-4 space-y-4">
+        <div className="p-4 space-y-4 animate-fade-in">
           {day.places.map((place, idx) => (
             <div
               key={idx}
-              className="border rounded-lg p-3 bg-gray-50"
+              className="border rounded-lg p-3 bg-gray-50 hover:bg-white transition-colors"
             >
               {/* ✅ PLACE NAME FIXED */}
               <h4 className="font-semibold text-gray-900">

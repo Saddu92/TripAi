@@ -6,6 +6,7 @@ import axios from "axios";
 import { useRouter } from "next/navigation";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
+import toast from "react-hot-toast";
 import PageTransition from "@/components/PageTransition";
 
 export default function RegisterPage() {
@@ -23,7 +24,7 @@ export default function RegisterPage() {
         password,
       });
 
-      alert("Account created successfully");
+      toast.success("Account created successfully");
       router.push("/login");
     } catch (err) {
        console.error(err);

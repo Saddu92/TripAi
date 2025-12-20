@@ -6,6 +6,7 @@ import axios from "axios";
 import { useRouter } from "next/navigation";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
+import toast from "react-hot-toast";
 import PageTransition from "@/components/PageTransition";
 
 export default function LoginPage() {
@@ -29,7 +30,7 @@ export default function LoginPage() {
 
       router.push("/planner");
     } catch (err) {
-      alert("Invalid email or password");
+      toast.error("Invalid email or password");
     } finally {
       setLoading(false);
     }

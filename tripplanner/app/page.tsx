@@ -28,6 +28,9 @@ function Home() {
       <section className="relative h-[80vh] w-full ">
         
       
+        <div className="absolute left-12 top-12 z-20">
+          <Image src="/hero-globe.svg" alt="hero" width={360} height={240} />
+        </div>
         <Image
           src="/hero.jpg"
           alt="Travel background"
@@ -58,7 +61,7 @@ function Home() {
      
       </section>
       
-      ---
+      
       
       {/* FEATURES */}
     

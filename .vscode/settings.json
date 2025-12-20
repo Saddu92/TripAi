@@ -1,0 +1,14 @@
+{
+    "fileCopier.excludedFolders": [
+        "node_modules",
+        ".git",
+        ".vscode"
+    ],
+    "fileCopier.excludedPatterns": [
+        "*.exe",
+        "*.dll",
+        "*.jpg",
+        "*.png",
+        "*.pdf"
+    ]
+}

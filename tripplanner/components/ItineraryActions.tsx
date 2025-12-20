@@ -3,6 +3,7 @@
 import axios from "axios";
 import { Button } from "@/components/ui/button";
 import { Share2, Download, Heart, Pencil } from "lucide-react";
+import toast from "react-hot-toast";
 
 export default function ItineraryActions() {
 
@@ -12,13 +13,13 @@ export default function ItineraryActions() {
       const token = localStorage.getItem("token");
 
       if (!token) {
-        alert("Please login to save itinerary");
+        toast.error("Please log in to save this itinerary");
         return;
       }
 
       const raw = localStorage.getItem("itinerary");
       if (!raw) {
-        alert("No itinerary found to save");
+        toast("No itinerary found to save", { icon: "ℹ️" });
         return;
       }
 
@@ -34,39 +35,35 @@ export default function ItineraryActions() {
         }
       );
 
-      alert("Itinerary saved successfully!");
+      toast.success("Itinerary saved successfully!");
     } catch (error: any) {
       console.error("Save itinerary failed", error);
 
       if (error?.response?.status === 401 || error?.response?.status === 403) {
-        alert("Session expired. Please login again.");
+        toast.error("Session expired. Please log in again.");
       } else {
-        alert("Failed to save itinerary");
+        toast.error("Failed to save itinerary. Try again later.");
       }
     }
   };
 
   return (
-    <div className="flex flex-wrap gap-3 justify-end">
-      <Button
-        variant="outline"
-        className="flex gap-2 items-center"
-        onClick={handleSave}
-      >
-        <Heart size={18} /> Save
+    <div className="card-style p-3 flex flex-wrap gap-3 justify-end">
+      <button onClick={handleSave} className="btn-primary flex gap-2 items-center px-4 py-2 rounded-lg">
+        <Heart size={16} /> Save
+      </button>
+
+      <Button variant="outline" className="flex gap-2 items-center">
+        <Share2 size={16} /> Share
       </Button>
 
       <Button variant="outline" className="flex gap-2 items-center">
-        <Share2 size={18} /> Share
+        <Pencil size={16} /> Edit
       </Button>
 
-      <Button variant="outline" className="flex gap-2 items-center">
-        <Pencil size={18} /> Edit
-      </Button>
-
-      <Button className="flex gap-2 items-center bg-blue-600 hover:bg-blue-700">
-        <Download size={18} /> Download PDF
-      </Button>
+      <button className="btn-primary flex gap-2 items-center px-4 py-2 rounded-lg">
+        <Download size={16} /> Download
+      </button>
     </div>
   );
 }
