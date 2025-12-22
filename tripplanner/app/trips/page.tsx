@@ -59,7 +59,7 @@ export default function TripsPage() {
       <div className="w-full mx-auto p-6">
         <div className="flex items-center justify-between mb-6">
           <h1 className="text-4xl font-bold">Your Saved Trips</h1>
-          <p className="text-sm text-gray-500">Manage and export your saved itineraries</p>
+
         </div>
 
         {trips.length === 0 ? (

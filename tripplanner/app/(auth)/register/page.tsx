@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import Image from "next/image";
 import Link from "next/link";
 import axios from "axios";
 import { useRouter } from "next/navigation";
@@ -8,6 +9,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import toast from "react-hot-toast";
 import PageTransition from "@/components/PageTransition";
+import GoogleLoginButton from "@/components/GoogleLogin";
 
 export default function RegisterPage() {
   const router = useRouter();
@@ -27,7 +29,7 @@ export default function RegisterPage() {
       toast.success("Account created successfully");
       router.push("/login");
     } catch (err) {
-       console.error(err);
+      toast.error("Registration failed");
     } finally {
       setLoading(false);
     }
@@ -35,45 +37,73 @@ export default function RegisterPage() {
 
   return (
     <PageTransition>
-      <div className="min-h-screen flex items-center justify-center bg-gray-50">
-        <div className="bg-white p-10 rounded-2xl shadow-xl w-full max-w-md">
-          <h1 className="text-3xl font-bold text-center mb-6">
-            Create Account
-          </h1>
+      <div className="min-h-screen flex items-center justify-center bg-gray-50 px-4">
+        <div className="w-full max-w-5xl bg-white rounded-3xl shadow-xl overflow-hidden grid grid-cols-1 md:grid-cols-2">
 
-          <p className="text-center text-gray-600 mb-6">
-            Join us and start planning smarter
-          </p>
-
-          <div className="space-y-4">
-            <Input
-              type="email"
-              placeholder="Email address"
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
+          {/* LEFT IMAGE */}
+          <div className="hidden md:block relative">
+            <Image
+              src="/login.jpg"
+              alt="Travel"
+              fill
+              className="object-cover"
+              priority
             />
-
-            <Input
-              type="password"
-              placeholder="Password"
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}
-            />
-
-            <Button
-              className="w-full bg-blue-600 hover:bg-blue-700 py-5 text-lg"
-              onClick={handleSignup}
-              disabled={loading}
-            >
-              {loading ? "Creating account..." : "Sign Up"}
-            </Button>
+            <div className="absolute inset-0 bg-black/40 flex flex-col justify-center items-center text-white p-8">
+              <h1 className="text-3xl font-bold mb-4">Welcome to AI Travel Buddy</h1>
+              <p className="text-center max-w-sm">
+                Create an account to start planning smarter.
+              </p>
+            </div>
           </div>
 
-          <div className="text-center mt-6 text-sm">
-            Already have an account?{" "}
-            <Link href="/login" className="text-blue-600 font-semibold">
-              Log in
-            </Link>
+          {/* FORM */}
+          <div className="flex flex-col justify-center p-10">
+            <h1 className="text-3xl font-bold mb-2">Create Account</h1>
+            <p className="text-gray-500 mb-8">
+              Join us and start planning smarter
+            </p>
+
+            <div className="space-y-5">
+              <Input
+                type="email"
+                placeholder="Email address"
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+              />
+
+              <Input
+                type="password"
+                placeholder="Password"
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
+              />
+
+              <Button
+                className="w-full bg-blue-600 hover:bg-blue-700 py-6 text-lg rounded-xl"
+                onClick={handleSignup}
+                disabled={loading}
+              >
+                {loading ? "Creating account..." : "Sign Up"}
+              </Button>
+
+              {/* Divider */}
+              <div className="flex items-center gap-3">
+                <div className="flex-1 h-px bg-gray-200" />
+                <span className="text-sm text-gray-400">OR</span>
+                <div className="flex-1 h-px bg-gray-200" />
+              </div>
+
+              {/* Google */}
+              <GoogleLoginButton />
+            </div>
+
+            <div className="text-center mt-6 text-sm">
+              Already have an account?{" "}
+              <Link href="/login" className="text-blue-600 font-semibold">
+                Log in
+              </Link>
+            </div>
           </div>
         </div>
       </div>

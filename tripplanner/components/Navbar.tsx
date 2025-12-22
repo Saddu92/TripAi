@@ -1,28 +1,59 @@
 "use client";
 
-import AvatarMenu from "./AvatarMenu";
 import Link from "next/link";
+import AvatarMenu from "./AvatarMenu";
+import { Button } from "@/components/ui/button";
+import { useAuth } from "@/hooks/useAuth";
 
 export default function Navbar() {
+  const user = useAuth();
+
   return (
-    <header className="bg-white/80 backdrop-blur border-b border-gray-100 px-6 py-4 flex justify-between items-center">
-      <Link href="/" className="text-2xl font-semibold text-blue-600">
-        AI Travel Buddy
-      </Link>
+    <header className="sticky top-0 z-50 bg-white/80 backdrop-blur border-b border-gray-100">
+      <div className="max-w-7xl mx-auto px-6 py-4 flex items-center justify-between">
+        
+        {/* Logo */}
+        <Link
+          href="/"
+          className="text-2xl font-bold text-blue-600 tracking-tight"
+        >
+          ✈️ AI Travel Buddy
+        </Link>
 
-      <nav className="hidden md:flex gap-8 text-sm font-medium text-gray-600">
-        <Link href="/planner" className="hover:text-blue-600">
-          Plan Trip
-        </Link>
-        <Link href="/trips" className="hover:text-blue-600">
-          My Trips
-        </Link>
-        <Link href="/admin/analytics" className="hover:text-blue-600">
-          Admin
-        </Link>
-      </nav>
+        {/* Right Section */}
+        <div className="flex items-center gap-8">
+          
+          {/* Navigation */}
+          <nav className="flex items-center gap-8 text-sm font-medium text-gray-600">
+            <Link href="/planner" className="hover:text-blue-600">
+              Plan Trip
+            </Link>
 
-      <AvatarMenu />
+            {user && (
+              <Link href="/trips" className="hover:text-blue-600">
+                My Trips
+              </Link>
+            )}
+
+            {user?.role === "admin" && (
+              <Link href="/admin/analytics" className="hover:text-blue-600">
+                Admin
+              </Link>
+            )}
+          </nav>
+
+          {/* Auth Action */}
+          {user ? (
+            <AvatarMenu />
+          ) : (
+            <Link href="/login">
+              <Button className="bg-blue-600 hover:bg-blue-700 rounded-full px-6">
+                Login
+              </Button>
+            </Link>
+          )}
+        </div>
+      </div>
     </header>
   );
 }
