@@ -40,36 +40,34 @@ export default function AdminAnalyticsPage() {
     stats?.top_destinations?.map((d: any) => ({ name: d._id, value: d.count })) || [];
 
   const downloadReport = async () => {
-    try {
-      const token = localStorage.getItem("token");
-      if (!token) {
-        alert("Please login again");
-        return;
-      }
+  try {
+    const res = await api.get("/admin/reports/itineraries", {
+      responseType: "blob", // VERY IMPORTANT
+    });
 
-      const res = await fetch("http://localhost:8000/admin/reports/itineraries", {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      });
+    const blob = new Blob([res.data], {
+      type: "text/csv",
+    });
 
-      if (!res.ok) {
-        alert("Failed to download report");
-        return;
-      }
+    const url = window.URL.createObjectURL(blob);
 
-      const blob = await res.blob();
-      const url = window.URL.createObjectURL(blob);
-      const a = document.createElement("a");
-      a.href = url;
-      a.download = `itineraries_report_${new Date().toISOString().split('T')[0]}.csv`;
-      a.click();
-      window.URL.revokeObjectURL(url);
-    } catch (error) {
-      console.error("Download error:", error);
-      alert("Failed to download report");
-    }
-  };
+    const a = document.createElement("a");
+    a.href = url;
+    a.download = `itineraries_report_${new Date()
+      .toISOString()
+      .split("T")[0]}.csv`;
+
+    document.body.appendChild(a);
+    a.click();
+
+    a.remove();
+    window.URL.revokeObjectURL(url);
+  } catch (error) {
+    console.error("Download error:", error);
+    alert("Failed to download report");
+  }
+};
+
 
   if (loading) {
     return (

@@ -3,6 +3,7 @@
 import { useEffect, useState } from "react";
 import axios from "axios";
 import Link from "next/link";
+import api from "@/lib/api";
 
 interface Trip {
   _id: string;
@@ -21,14 +22,11 @@ export default function ProfilePage() {
       try {
         const token = localStorage.getItem("token");
 
-        const res = await axios.get(
-          "http://localhost:8000/itineraries/",
-          {
-            headers: {
-              Authorization: `Bearer ${token}`,
-            },
-          }
-        );
+        const res = await api.get("/itineraries/", {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        });
 
         setTrips(res.data);
       } catch (err) {
@@ -63,25 +61,17 @@ export default function ProfilePage() {
 
         <div className="bg-white rounded-xl shadow p-6">
           <p className="text-gray-500 text-sm">Favorite Destination</p>
-          <p className="text-lg font-medium">
-            {trips[0]?.destination || "—"}
-          </p>
+          <p className="text-lg font-medium">{trips[0]?.destination || "—"}</p>
         </div>
       </div>
 
       {/* Saved Trips */}
-      <h2 className="text-2xl font-semibold mb-4">
-        Your Saved Itineraries
-      </h2>
+      <h2 className="text-2xl font-semibold mb-4">Your Saved Itineraries</h2>
 
-      {loading && (
-        <p className="text-gray-500">Loading your trips…</p>
-      )}
+      {loading && <p className="text-gray-500">Loading your trips…</p>}
 
       {!loading && trips.length === 0 && (
-        <p className="text-gray-500">
-          You haven’t saved any trips yet.
-        </p>
+        <p className="text-gray-500">You haven’t saved any trips yet.</p>
       )}
 
       <div className="grid md:grid-cols-2 gap-6">
@@ -90,16 +80,14 @@ export default function ProfilePage() {
             key={trip._id}
             className="bg-white rounded-xl shadow hover:shadow-lg transition p-6"
           >
-            <h3 className="text-xl font-semibold mb-1">
-              {trip.destination}
-            </h3>
+            <h3 className="text-xl font-semibold mb-1">{trip.destination}</h3>
 
             <p className="text-gray-600 text-sm mb-3">
               {trip.start_date} → {trip.end_date}
             </p>
-
             <p className="text-sm text-gray-500 mb-4">
-              {trip.days} days itinerary
+              {Array.isArray(trip.days) ? trip.days.length : trip.days} days
+              itinerary
             </p>
 
             <Link

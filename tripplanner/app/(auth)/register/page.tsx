@@ -10,6 +10,7 @@ import { Input } from "@/components/ui/input";
 import toast from "react-hot-toast";
 import PageTransition from "@/components/PageTransition";
 import GoogleLoginButton from "@/components/GoogleLogin";
+import api from "@/lib/api";
 
 export default function RegisterPage() {
   const router = useRouter();
@@ -21,7 +22,7 @@ export default function RegisterPage() {
   const handleSignup = async () => {
     try {
       setLoading(true);
-      await axios.post("http://localhost:8000/auth/register", {
+      await api.post("/auth/register", {
         email,
         password,
       });

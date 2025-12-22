@@ -20,12 +20,12 @@ export default function ChartsPlaceholder({ data }: { data: any[] }) {
   }
 
   return (
-    <div className="w-full h-80 bg-gray-900 rounded-xl p-6">
+    <div className="w-full h-100 bg-gray-900 rounded-xl p-6">
       <h2 className="text-xl font-semibold mb-4 text-white">
         Top Destinations
       </h2>
 
-      <ResponsiveContainer width="100%" height="100%">
+      <ResponsiveContainer width="100%" height="90%">
         <BarChart data={data}>
           <CartesianGrid strokeDasharray="3 3" stroke="#333" />
           <XAxis dataKey="name" stroke="#aaa" />

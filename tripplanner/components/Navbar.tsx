@@ -11,7 +11,6 @@ export default function Navbar() {
   return (
     <header className="sticky top-0 z-50 bg-white/80 backdrop-blur border-b border-gray-100">
       <div className="max-w-7xl mx-auto px-6 py-4 flex items-center justify-between">
-        
         {/* Logo */}
         <Link
           href="/"
@@ -22,7 +21,6 @@ export default function Navbar() {
 
         {/* Right Section */}
         <div className="flex items-center gap-8">
-          
           {/* Navigation */}
           <nav className="flex items-center gap-8 text-sm font-medium text-gray-600">
             <Link href="/planner" className="hover:text-blue-600">
@@ -35,7 +33,7 @@ export default function Navbar() {
               </Link>
             )}
 
-            {user?.role === "admin" && (
+            {["admin", "super_admin"].includes(user?.role ?? "") && (
               <Link href="/admin/analytics" className="hover:text-blue-600">
                 Admin
               </Link>

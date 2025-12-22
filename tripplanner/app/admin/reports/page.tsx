@@ -1,20 +1,42 @@
 "use client";
 
+import api from "@/lib/api";
+import { Button } from "@/components/ui/button";
+
+const downloadItinerary = async (itineraryId: string) => {
+  try {
+    const res = await api.get(
+      `/itineraries/${itineraryId}/download`,
+      { responseType: "blob" }
+    );
+
+    const blob = new Blob([res.data], { type: "text/csv" });
+    const url = window.URL.createObjectURL(blob);
+
+    const a = document.createElement("a");
+    a.href = url;
+    a.download = `itinerary_${itineraryId}.csv`;
+    document.body.appendChild(a);
+    a.click();
+
+    a.remove();
+    window.URL.revokeObjectURL(url);
+  } catch (err) {
+    console.error(err);
+    alert("Failed to download itinerary");
+  }
+};
+
 export default function ReportsPage() {
-  const downloadCSV = () => {
-    window.open("http://localhost:8000/admin/reports/itineraries");
-  };
-
   return (
-    <div>
-      <h1 className="text-3xl font-bold mb-6">Reports</h1>
+    <div className="p-6 space-y-4">
+      <h1 className="text-2xl font-bold">Admin Reports</h1>
 
-      <button
-        onClick={downloadCSV}
-        className="bg-blue-600 text-white px-6 py-3 rounded-lg"
+      <Button
+        onClick={() => downloadItinerary("123")}
       >
-        Download Itineraries CSV
-      </button>
+        Download Itinerary CSV
+      </Button>
     </div>
   );
 }

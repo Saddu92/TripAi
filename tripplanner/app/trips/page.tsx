@@ -12,27 +12,27 @@ export default function TripsPage() {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    const fetchTrips = async () => {
-      try {
-        const response = await api.get("/itineraries");
-        setTrips(response.data);
+  const fetchTrips = async () => {
+    try {
+      const response = await api.get("/itineraries");
 
-        // Normalize data (important)
-        const normalized = response.data.map((trip: any) => ({
-          ...trip,
-          days: Array.isArray(trip.days) ? trip.days : [],
-        }));
+      // Normalize ONCE
+      const normalized = response.data.map((trip: any) => ({
+        ...trip,
+        days: Array.isArray(trip.days) ? trip.days : [],
+      }));
 
-        setTrips(normalized);
-      } catch (error) {
-        console.error("Failed to fetch trips", error);
-      } finally {
-        setLoading(false);
-      }
-    };
+      setTrips(normalized);
+    } catch (error) {
+      console.error("Failed to fetch trips", error);
+    } finally {
+      setLoading(false);
+    }
+  };
 
-    fetchTrips();
-  }, []);
+  fetchTrips();
+}, []);
+
 
   const handleDelete = async (id: string, destination: string) => {
     const confirmed = confirm(`Delete trip to ${destination}?`);

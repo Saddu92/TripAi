@@ -1,6 +1,11 @@
 from fastapi import APIRouter, Depends, HTTPException
 from app.database import db
 from app.dependencies.rbac import require_roles
+from bson import ObjectId
+from app.dependencies.auth import get_current_user
+from app.utils.csv_export import generate_csv_from_itinerary
+
+
 
 router = APIRouter(prefix="/admin", tags=["Admin"])
 
@@ -106,3 +111,47 @@ def heatmap_data(_user=Depends(require_roles(["admin", "super_admin"]))):
 
     return points
 
+@router.get("/itineraries/{itinerary_id}/download")
+def download_itinerary(
+    itinerary_id: str,
+    user=Depends(get_current_user)
+):
+    itinerary = itineraries.find_one({
+        "_id": ObjectId(itinerary_id),
+        "user_id": ObjectId(user["_id"])  # ✅ FIX
+    })
+
+    if not itinerary:
+        raise HTTPException(status_code=404, detail="Itinerary not found")
+
+    csv_data = generate_csv_from_itinerary(itinerary)
+
+    return StreamingResponse(
+        iter([csv_data]),
+        media_type="text/csv",
+        headers={
+            "Content-Disposition": f"attachment; filename={itinerary['destination']}.csv"
+        }
+    )
+
+@router.get("/admin/itineraries/{itinerary_id}/download")
+def admin_download_itinerary(
+    itinerary_id: str,
+    _user=Depends(require_roles(["admin", "super_admin"]))
+):
+    itinerary = itineraries.find_one({
+        "_id": ObjectId(itinerary_id)
+    })
+
+    if not itinerary:
+        raise HTTPException(status_code=404, detail="Itinerary not found")
+
+    csv_data = generate_csv_from_itinerary(itinerary)
+
+    return StreamingResponse(
+        iter([csv_data]),
+        media_type="text/csv",
+        headers={
+            "Content-Disposition": f"attachment; filename={itinerary['destination']}.csv"
+        }
+    )

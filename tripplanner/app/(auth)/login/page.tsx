@@ -10,6 +10,7 @@ import toast from "react-hot-toast";
 import PageTransition from "@/components/PageTransition";
 import Image from "next/image";
 import GoogleLoginButton from "@/components/GoogleLogin";
+import api from "@/lib/api";
 
 export default function LoginPage() {
   const router = useRouter();
@@ -21,8 +22,7 @@ export default function LoginPage() {
   const handleLogin = async () => {
     try {
       setLoading(true);
-      const response = await axios.post(
-        "http://localhost:8000/auth/login",
+      const response = await api.post("/auth/login",
         { email, password }
       );
 
