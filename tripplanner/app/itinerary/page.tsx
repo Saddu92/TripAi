@@ -1,5 +1,4 @@
 "use client";
-
 import { useEffect, useMemo, useState } from "react";
 import Link from "next/link";
 import PageTransition from "@/components/PageTransition";
@@ -7,8 +6,19 @@ import DayAccordion from "@/components/DayAccordion";
 import CostSummary from "@/components/CostSummary";
 import ItineraryActions from "@/components/ItineraryActions";
 import { MapPin } from "lucide-react";
-import ItineraryMap from "@/components/ClientMap";
-import ExpensesChart from "@/components/ExpensesChart";
+
+import dynamic from "next/dynamic";
+
+const ItineraryMap = dynamic(
+  () => import("@/components/ClientMap"),
+  { ssr: false }
+);
+
+const ExpensesChart = dynamic(
+  () => import("@/components/ExpensesChart"),
+  { ssr: false }
+);
+
 
 export default function ItineraryPage() {
   const [data, setData] = useState<any | null>(null);
