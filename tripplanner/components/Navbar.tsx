@@ -4,24 +4,40 @@ import Link from "next/link";
 import AvatarMenu from "./AvatarMenu";
 import { Button } from "@/components/ui/button";
 import { useAuth } from "@/hooks/useAuth";
+import { useEffect, useState } from "react";
 
 export default function Navbar() {
   const user = useAuth();
+  const [mounted, setMounted] = useState(false);
+
+  useEffect(() => {
+    setMounted(true);
+  }, []);
+
+  // ⛔ Prevent hydration mismatch
+  if (!mounted) {
+    return (
+      <header className="sticky top-0 z-50 bg-white/80 backdrop-blur border-b border-gray-100">
+        <div className="max-w-7xl mx-auto px-6 py-4 flex items-center justify-between">
+          <Link href="/" className="text-2xl font-bold text-blue-600">
+            ✈️ AI Travel Buddy
+          </Link>
+        </div>
+      </header>
+    );
+  }
 
   return (
     <header className="sticky top-0 z-50 bg-white/80 backdrop-blur border-b border-gray-100">
       <div className="max-w-7xl mx-auto px-6 py-4 flex items-center justify-between">
+        
         {/* Logo */}
-        <Link
-          href="/"
-          className="text-2xl font-bold text-blue-600 tracking-tight"
-        >
+        <Link href="/" className="text-2xl font-bold text-blue-600">
           ✈️ AI Travel Buddy
         </Link>
 
         {/* Right Section */}
         <div className="flex items-center gap-8">
-          {/* Navigation */}
           <nav className="flex items-center gap-8 text-sm font-medium text-gray-600">
             <Link href="/planner" className="hover:text-blue-600">
               Plan Trip
@@ -33,14 +49,13 @@ export default function Navbar() {
               </Link>
             )}
 
-            {["admin", "super_admin"].includes(user?.role ?? "") && (
+            {user?.role === "admin" && (
               <Link href="/admin/analytics" className="hover:text-blue-600">
                 Admin
               </Link>
             )}
           </nav>
 
-          {/* Auth Action */}
           {user ? (
             <AvatarMenu />
           ) : (
