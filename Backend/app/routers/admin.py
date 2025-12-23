@@ -4,10 +4,8 @@ from app.dependencies.rbac import require_roles
 from bson import ObjectId
 from app.dependencies.auth import get_current_user
 from app.utils.csv_export import generate_csv_from_itinerary
+router = APIRouter()
 
-
-
-router = APIRouter(prefix="/admin", tags=["Admin"])
 
 users = db["users"]
 itineraries = db["itineraries"]
