@@ -10,6 +10,8 @@ export default function Navbar() {
   const user = useAuth();
   const [mounted, setMounted] = useState(false);
 
+  const adminRoles = ["admin", "super_admin"];
+
   useEffect(() => {
     setMounted(true);
   }, []);
@@ -30,7 +32,6 @@ export default function Navbar() {
   return (
     <header className="sticky top-0 z-50 bg-white/80 backdrop-blur border-b border-gray-100">
       <div className="max-w-7xl mx-auto px-6 py-4 flex items-center justify-between">
-        
         {/* Logo */}
         <Link href="/" className="text-2xl font-bold text-blue-600">
           ✈️ AI Travel Buddy
@@ -49,7 +50,7 @@ export default function Navbar() {
               </Link>
             )}
 
-            {user?.role === "admin" && (
+            {adminRoles.includes(user?.role ?? "") && (
               <Link href="/admin/analytics" className="hover:text-blue-600">
                 Admin
               </Link>
