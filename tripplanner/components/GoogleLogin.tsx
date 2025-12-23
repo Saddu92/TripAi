@@ -1,6 +1,7 @@
 "use client";
 
 import { GoogleLogin } from "@react-oauth/google";
+import api from "@/lib/api";
 import axios from "axios";
 import toast from "react-hot-toast";
 
@@ -9,8 +10,8 @@ export default function GoogleLoginButton() {
     try {
       const token = credentialResponse.credential;
 
-      const res = await axios.post(
-        "http://localhost:8000/auth/google",
+      const res = await api.post(
+        "/auth/google",
         { token }
       );
 
