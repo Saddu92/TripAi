@@ -1,4 +1,5 @@
 from fastapi import APIRouter, HTTPException
+from pydantic import BaseModel
 from google.oauth2 import id_token
 from google.auth.transport import requests
 import os
@@ -14,15 +15,28 @@ from app.utils.security import (
 router = APIRouter()
 users = db["users"]
 
+# ---------------- SCHEMAS ----------------
+
+class RegisterSchema(BaseModel):
+    email: str
+    password: str
+
+class LoginSchema(BaseModel):
+    email: str
+    password: str
+
+class GoogleLoginSchema(BaseModel):
+    token: str
+
 # ---------------- REGISTER ----------------
 @router.post("/register")
-def signup(payload: dict):
-    if users.find_one({"email": payload["email"]}):
+def signup(payload: RegisterSchema):
+    if users.find_one({"email": payload.email}):
         raise HTTPException(status_code=400, detail="Email already exists")
 
     user = {
-        "email": payload["email"],
-        "password": hash_password(payload["password"]),
+        "email": payload.email,
+        "password": hash_password(payload.password),
         "role": "user",
         "provider": "local"
     }
@@ -32,26 +46,22 @@ def signup(payload: dict):
 
 # ---------------- LOGIN ----------------
 @router.post("/login")
-def login(payload: dict):
-    user = users.find_one({"email": payload["email"]})
+def login(payload: LoginSchema):
+    user = users.find_one({"email": payload.email})
 
     if not user:
         raise HTTPException(status_code=401, detail="Invalid credentials")
 
     if user.get("provider") == "google":
-        raise HTTPException(
-            status_code=400,
-            detail="Please login using Google"
-        )
+        raise HTTPException(status_code=400, detail="Please login using Google")
 
-    if not verify_password(payload["password"], user["password"]):
+    if not verify_password(payload.password, user["password"]):
         raise HTTPException(status_code=401, detail="Invalid credentials")
 
-    # Upgrade hash if needed
     if needs_rehash(user["password"]):
         users.update_one(
             {"_id": user["_id"]},
-            {"$set": {"password": hash_password(payload["password"])}}
+            {"$set": {"password": hash_password(payload.password)}}
         )
 
     token = create_access_token({
@@ -64,15 +74,10 @@ def login(payload: dict):
 
 # ---------------- GOOGLE LOGIN ----------------
 @router.post("/google")
-def google_login(payload: dict):
-    token = payload.get("token")
-
-    if not token:
-        raise HTTPException(status_code=400, detail="Token missing")
-
+def google_login(payload: GoogleLoginSchema):
     try:
         info = id_token.verify_oauth2_token(
-            token,
+            payload.token,
             requests.Request(),
             os.getenv("GOOGLE_CLIENT_ID")
         )
