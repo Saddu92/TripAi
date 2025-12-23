@@ -103,3 +103,21 @@ Planning a trip usually involves:
 ```bash
 git clone https://github.com/your-username/ai-travel-buddy.git
 cd ai-travel-buddy
+cd backend
+python -m venv venv
+venv\Scripts\activate   # Windows
+# source venv/bin/activate  # macOS / Linux
+pip install -r requirements.txt
+
+### Create .env
+MONGO_URI=your_mongodb_uri
+JWT_SECRET=your_secret_key
+GEMINI_API_KEY=your_gemini_api_key
+uvicorn app.main:app --reload
+
+### Frontend setup
+cd tripplanner
+npm install
+npm run dev
+
+
