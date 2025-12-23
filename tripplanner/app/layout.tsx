@@ -15,10 +15,15 @@ const geistMono = Geist_Mono({
   subsets: ["latin"],
 });
 
-export const metadata: Metadata = {
+export const metadata = {
   title: "AI Travel Buddy",
-  description: "Smart AI Trip Planner",
+  icons: {
+    icon: "/favicon.ico",   // or /icon.png
+    shortcut: "/favicon.ico",
+    apple: "/favicon.ico",
+  },
 };
+
 
 export default function RootLayout({
   children,
