@@ -22,9 +22,7 @@ export default function LoginPage() {
   const handleLogin = async () => {
     try {
       setLoading(true);
-      const response = await api.post("/auth/login",
-        { email, password }
-      );
+      const response = await api.post("/auth/login", { email, password });
 
       localStorage.setItem("token", response.data.access_token);
       toast.success("Login Successfully!");
@@ -40,7 +38,6 @@ export default function LoginPage() {
     <PageTransition>
       <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-blue-50 via-white to-indigo-50 px-4">
         <div className="w-full max-w-5xl bg-white rounded-3xl shadow-xl overflow-hidden grid grid-cols-1 md:grid-cols-2">
-
           {/* LEFT IMAGE */}
           <div className="hidden md:block relative">
             <Image
@@ -53,7 +50,8 @@ export default function LoginPage() {
             <div className="absolute inset-0 bg-black/40 flex flex-col justify-center items-center text-white p-8">
               <h1 className="text-3xl font-bold mb-4">AI Travel Buddy</h1>
               <p className="text-center max-w-sm">
-                Plan trips, manage budgets and explore destinations effortlessly.
+                Plan trips, manage budgets and explore destinations
+                effortlessly.
               </p>
             </div>
           </div>
@@ -81,6 +79,7 @@ export default function LoginPage() {
               />
 
               <Button
+                type="button" // 👈 THIS IS THE FIX
                 className="w-full bg-blue-600 hover:bg-blue-700 py-6 text-lg rounded-xl"
                 onClick={handleLogin}
                 disabled={loading}

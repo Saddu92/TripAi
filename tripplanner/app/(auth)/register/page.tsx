@@ -40,7 +40,6 @@ export default function RegisterPage() {
     <PageTransition>
       <div className="min-h-screen flex items-center justify-center bg-gray-50 px-4">
         <div className="w-full max-w-5xl bg-white rounded-3xl shadow-xl overflow-hidden grid grid-cols-1 md:grid-cols-2">
-
           {/* LEFT IMAGE */}
           <div className="hidden md:block relative">
             <Image
@@ -51,7 +50,9 @@ export default function RegisterPage() {
               priority
             />
             <div className="absolute inset-0 bg-black/40 flex flex-col justify-center items-center text-white p-8">
-              <h1 className="text-3xl font-bold mb-4">Welcome to AI Travel Buddy</h1>
+              <h1 className="text-3xl font-bold mb-4">
+                Welcome to AI Travel Buddy
+              </h1>
               <p className="text-center max-w-sm">
                 Create an account to start planning smarter.
               </p>
@@ -81,6 +82,7 @@ export default function RegisterPage() {
               />
 
               <Button
+                type="button" // 👈 REQUIRED
                 className="w-full bg-blue-600 hover:bg-blue-700 py-6 text-lg rounded-xl"
                 onClick={handleSignup}
                 disabled={loading}
